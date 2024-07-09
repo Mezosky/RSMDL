@@ -1,7 +1,3 @@
-# Representational Similarity Measures (RSM)
-
-This repository centralizes various measures of similarity for representations, specifically tailored for comparing the weights and outputs of deep learning models. It provides tools and methods to assess and analyze similarities between different models and layers, aiding in model evaluation and research.
-
 
 | Type                                   | Measure                                                         | PT | OT | IS | ILT | TR | AT | Programmed |
 |----------------------------------------|-----------------------------------------------------------------|----|----|----|-----|----|----|------------|
@@ -45,11 +41,3 @@ This repository centralizes various measures of similarity for representations, 
 |                                        | kNN-Graph Modularity [84]                                       | ✔  | ✔  | ✔  | ✔   | ✔  | ✔  |            |
 |                                        | Neuron-Graph Modularity [74]                                    | ✔  | ✔  | ✔  | ✔   | ✔  | ✔  |            |
 
-
-## How to install
-
-To install the library you can use the next command:
-
-```python
-pip install deep-reps==0.0.1
-```

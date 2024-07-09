@@ -1,5 +1,4 @@
 import torch
-
 from similarity_functions import euclidean_distance, linear_kernel
 from utils import compute_rsm, sqrtm_torch
 
