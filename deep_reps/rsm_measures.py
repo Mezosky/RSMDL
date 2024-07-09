@@ -5,8 +5,8 @@ from deep_reps.utils import compute_rsm, sqrtm_torch
 
 def rsm_norm_difference(R, R_prime, similarity_function=linear_kernel):
     """RSM Norm Difference"""
-    R = torch.tensor(R)
-    R_prime = torch.tensor(R_prime)
+    R = R.clone().detach()
+    R_prime = R_prime.clone().detach()
 
     S = compute_rsm(R, similarity_function)
     S_prime = compute_rsm(R_prime, similarity_function)
@@ -16,8 +16,8 @@ def rsm_norm_difference(R, R_prime, similarity_function=linear_kernel):
 
 def representation_similarity_analysis(R, R_prime, similarity_function=linear_kernel):
     """Representation Similarity Analysis"""
-    R = torch.tensor(R)
-    R_prime = torch.tensor(R_prime)
+    R = R.clone().detach()
+    R_prime = R_prime.clone().detach()
 
     S = compute_rsm(R, similarity_function)
     S_prime = compute_rsm(R_prime, similarity_function)
@@ -32,8 +32,8 @@ def representation_similarity_analysis(R, R_prime, similarity_function=linear_ke
 
 def centered_kernel_alignment(R, R_prime, similarity_function=linear_kernel):
     """Centered Kernel Alignment"""
-    R = torch.tensor(R)
-    R_prime = torch.tensor(R_prime)
+    R = R.clone().detach()
+    R_prime = R_prime.clone().detach()
 
     S = compute_rsm(R, similarity_function)
     S_prime = compute_rsm(R_prime, similarity_function)
@@ -72,8 +72,8 @@ def dCov(S, S_prime):
 def distance_correlation(R, R_prime, similarity_function=euclidean_distance):
     """Distance Correlation"""
 
-    R = torch.tensor(R)
-    R_prime = torch.tensor(R_prime)
+    R = R.clone().detach()
+    R_prime = R_prime.clone().detach()
 
     S = compute_rsm(R, similarity_function)
     S_prime = compute_rsm(R_prime, similarity_function)
@@ -91,8 +91,8 @@ def make_positive_semi_definite(matrix, epsilon=1e-10):
 
 def normalized_bures_similarity(R, R_prime, similarity_function=linear_kernel):
     """Normalized Bures Similarity"""
-    R = torch.tensor(R)
-    R_prime = torch.tensor(R_prime)
+    R = R.clone().detach()
+    R_prime = R_prime.clone().detach()
 
     S = compute_rsm(R, similarity_function)
     S = make_positive_semi_definite(S)
@@ -107,8 +107,8 @@ def normalized_bures_similarity(R, R_prime, similarity_function=linear_kernel):
 
 def eigenspace_overlap_score(R, R_prime, similarity_function=linear_kernel):
     """Eigenspace Overlap Score"""
-    R = torch.tensor(R)
-    R_prime = torch.tensor(R_prime)
+    R = R.clone().detach()
+    R_prime = R_prime.clone().detach()
 
     S = compute_rsm(R, similarity_function)
     S_prime = compute_rsm(R_prime, similarity_function)
@@ -132,8 +132,8 @@ def gulp_similarity(R, R_prime):
 def unified_linear_probing(R, R_prime, lamb=0.1):
     """Unified Linear Probing"""
 
-    R = torch.tensor(R)
-    R_prime = torch.tensor(R_prime)
+    R = R.clone().detach()
+    R_prime = R_prime.clone().detach()
 
     S = gulp_similarity(R, R)
     S_prime = gulp_similarity(R_prime, R_prime)
@@ -160,8 +160,8 @@ def riemannian_similarity(R, R_prime):
 def riemannian_distance(R, R_prime):
     """Riemannian Distance"""
 
-    R = torch.tensor(R)
-    R_prime = torch.tensor(R_prime)
+    R = R.clone().detach()
+    R_prime = R_prime.clone().detach()
 
     S = riemannian_similarity(R, R)
     S_prime = riemannian_similarity(R_prime, R_prime)

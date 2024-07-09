@@ -11,5 +11,7 @@ Currently, the project status can be seen in the following [table](table.md). In
 To install the library you can use the next command:
 
 ```python
-pip install deep-reps==0.0.1
+pip install -U deep-reps
 ```
+
+
