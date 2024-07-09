@@ -1,6 +1,6 @@
 # implementation in torch
 import torch
-from utils import pca
+from deep_reps.utils import pca
 
 
 def mean_center(X):

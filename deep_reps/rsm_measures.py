@@ -1,6 +1,6 @@
 import torch
-from similarity_functions import euclidean_distance, linear_kernel
-from utils import compute_rsm, sqrtm_torch
+from deep_reps.similarity_functions import euclidean_distance, linear_kernel
+from deep_reps.utils import compute_rsm, sqrtm_torch
 
 
 def rsm_norm_difference(R, R_prime, similarity_function=linear_kernel):

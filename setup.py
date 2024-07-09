@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-VERSION = "0.0.1"
+VERSION = "0.0.3"
 DESCRIPTION = "Representational Similarity Measures for Deep Learning"
 LONG_DESCRIPTION = "DeepReps is a comprehensive library designed to centralize various measures of similarity for deep learning representations. It is specifically tailored for comparing the weights and outputs of deep learning models, providing a valuable toolkit for researchers and practitioners to assess and analyze model similarities."
 
