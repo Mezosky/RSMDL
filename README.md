@@ -16,7 +16,7 @@ Currently, the project status can be seen in the following [table](table.md). In
 <img src="./docs/representations.png" width=450/>
 </p>
 
-Representation similarity compares the outputs of two models given a set of inputs \(X\). The goal is to compare representations $R$ and $R'$ that represent a batch of tensor representations obtained from specific layers of the models being studied. Formally, we can define a model as:
+Representation similarity compares the outputs of two models given a set of inputs $X$. The goal is to compare representations $R$ and $R'$ that represent a batch of tensor representations obtained from specific layers of the models being studied. Formally, we can define a model as:
 
 $$F := (f^{(l)} \circ f^{(l-1)} \circ \dots \circ f^{(1)})$$
 
@@ -38,7 +38,7 @@ pip install -U deep-reps
 
 The library is user-friendly, allowing you to directly import the desired metric and generate a set of vectors for evaluation. It is important to note that the matrices to be evaluated should have the dimensionality $R^{N \times D}$, where $N$ represents the number of instances and $D$ is the dimension of each tensor representation. When comparing two matrices $R$ and $R'$, ensure that $D=D'$; otherwise, errors will occur.
 
-As an example, a set of outputs from two Clip models is compared using the `rsm_norm_difference` metric.
+As an example, a set of outputs from two Clip models are compared using the `rsm_norm_difference` metric.
 
 ```python
 import torch
