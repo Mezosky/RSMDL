@@ -1,4 +1,5 @@
 import torch
+
 from deep_reps.similarity_functions import euclidean_distance, linear_kernel
 from deep_reps.utils import compute_rsm, sqrtm_torch
 

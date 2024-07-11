@@ -1,3 +1,5 @@
+from itertools import combinations
+
 import torch
 
 
@@ -62,3 +64,71 @@ def compute_rsm(input_tensor, similarity_function):
         for j in range(n):
             rsm_matrix[i, j] = similarity_function(input_tensor[i], input_tensor[j])
     return rsm_matrix
+
+
+def normalize_matrix(matrix):
+    norm = torch.norm(matrix, p="fro")
+
+    if norm == 0:
+        raise ValueError("The norm of the matrix is zero, cannot normalize.")
+
+    normalized_matrix = matrix / norm
+    return normalized_matrix
+
+
+def mean_center_columns(matrix):
+    column_means = matrix.mean(dim=0, keepdim=True)
+    mean_centered_matrix = matrix - column_means
+    return mean_centered_matrix
+
+
+def matrix_inverse_sqrt(A):
+    U, S, V = torch.svd(A)
+    S_inv_sqrt = torch.diag_embed(1.0 / torch.sqrt(S))
+    A_inv_sqrt = U @ S_inv_sqrt @ V.t()
+    return A_inv_sqrt
+
+
+def procrustes(X, Y):
+    U, _, V = torch.svd(torch.matmul(X.T, Y))
+    Q = torch.matmul(U, V.T)
+    return Q
+
+
+def epsilon_approximate_match(R, R_prime, epsilon):
+    _, D = R.shape
+    _, D_prime = R_prime.shape
+    J_max = set()
+    J_prime_max = set()
+
+    for J_size in range(1, min(D, D_prime) + 1):
+        for J in combinations(range(D), J_size):
+            for J_prime in combinations(range(D_prime), J_size):
+                match = True
+                for j in J:
+                    R_j = R[:, j]
+                    min_diff = float("inf")
+                    for r in torch.split(R_prime, 1, dim=1):
+                        diff = torch.norm(r.squeeze() - R_j)
+                        if diff < min_diff:
+                            min_diff = diff
+                    if min_diff > epsilon * torch.norm(R_j):
+                        match = False
+                        break
+
+                for j_prime in J_prime:
+                    R_prime_j = R_prime[:, j_prime]
+                    min_diff = float("inf")
+                    for r_prime in torch.split(R, 1, dim=1):
+                        diff = torch.norm(r_prime.squeeze() - R_prime_j)
+                        if diff < min_diff:
+                            min_diff = diff
+                    if min_diff > epsilon * torch.norm(R_prime_j):
+                        match = False
+                        break
+
+                if match:
+                    J_max.update(J)
+                    J_prime_max.update(J_prime)
+
+    return J_max, J_prime_max

@@ -1,4 +1,7 @@
 /deep_reps.egg-info
+/dev
 /dist
 /build
 /.ruff_cache
+
+guidefome.md
