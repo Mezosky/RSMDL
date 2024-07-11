@@ -132,3 +132,10 @@ def epsilon_approximate_match(R, R_prime, epsilon):
                     J_prime_max.update(J_prime)
 
     return J_max, J_prime_max
+
+
+def get_knn_indices_and_ranks(X, k):
+    distances = torch.cdist(X, X)
+    knn_indices = distances.argsort(dim=1)[:, 1 : k + 1]
+    ranks = torch.argsort(torch.argsort(distances, dim=1), dim=1)[:, 1 : k + 1]
+    return knn_indices, ranks

@@ -104,7 +104,7 @@ def partial_whitening_shape_metric(
     return loss.item()
 
 
-def linear_regression(R, R_prime):
+def aligned_linear_regression(R, R_prime):
     product_inverse_sqrt = matrix_inverse_sqrt(R_prime.T @ R_prime)
     product_transposed_R = (R_prime @ product_inverse_sqrt).T @ R
     linear_measure = (

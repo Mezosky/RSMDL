@@ -23,10 +23,10 @@
 |                                        | Unified Linear Probing (GULP)                              | ✔  | ✔  | ✔  | ✔   | ✔  | ✔  | ✔          |
 |                                        | Riemannian Distance                                        | ✔  | ✔  | ✔  | ✔   | ✔  | ✔  | ✔          |
 | **Neighbors**                          |                                                            |    |    |    |     |    |    |            |
-|                                        | Jaccard                                                    | ✔  | ✔  | ✔  | ✔   | ✔  | ✔  |            |
-|                                        | Second-Order Cosine Similarity                             | ✔  | ✔  | ✔  | ✔   | ✔  | ✔  |            |
-|                                        | Rank Similarity                                            | ✔  | ✔  | ✔  | ✔   | ✔  | ✔  |            |
-|                                        | Joint Rank and Jaccard Similarity                          | ✔  | ✔  | ✔  | ✔   | ✔  | ✔  |            |
+|                                        | Jaccard                                                    | ✔  | ✔  | ✔  | ✔   | ✔  | ✔  | ✔          |
+|                                        | Second-Order Cosine Similarity                             | ✔  | ✔  | ✔  | ✔   | ✔  | ✔  | ✔          |
+|                                        | Rank Similarity                                            | ✔  | ✔  | ✔  | ✔   | ✔  | ✔  | ✔          |
+|                                        | Joint Rank and Jaccard Similarity                          | ✔  | ✔  | ✔  | ✔   | ✔  | ✔  | ✔          |
 | **Topology**                           |                                                            |    |    |    |     |    |    |            |
 |                                        | Geometry Score (GS)                                        | ✔  | ✔  | ✔  | ✔   | ✔  | ✔  |            |
 |                                        | Multi-Scale Intrinsic Distance (IMD)                       | ✔  | ✔  | ✔  | ✔   | ✔  | ✔  |            |
