@@ -1,10 +1,27 @@
 # Representational Similarity Measures for Deep Learning (RSMDL)
 
+![Representation-similarity](/docs/similarity.png)
+
 This repository centralizes various measures of similarity for representations, specifically tailored for comparing the weights and outputs of deep learning models. It provides tools and methods to assess and analyze similarities between different models and layers, aiding in model evaluation and research.
 
 This repository is based on the compilation of similarity metrics presented in the survey [Klabunde, 2023](https://arxiv.org/abs/2305.06329). The study exposes various types of metrics; for the coding, the logics presented in the study have been followed, and PyTorch has been used for the implementation.
 
 Currently, the project status can be seen in the following [table](table.md). In it, you will find the different metrics that have been programmed and how to call each of the functions that define them.
+
+## What are the Representational Similarities?
+
+### Representation Similarity
+
+Representation similarity compares the outputs of two models given a set of inputs \(X\). The goal is to compare representations \(R\) and \(R'\) that represent a batch of tensor representations obtained from specific layers of the models being studied. Formally, we can define a model as:
+
+$$F := (f^{(l)} \circ f^{(l-1)} \circ \dots \circ f^{(1)})$$
+
+Thus, a representation \(R^{(l)}\) of an instance \(X\) is given by:
+
+$$R^{(l)} = f^{(l)}(X) \in \mathbb{R}^{N \times D}$$
+
+Here, the representation of the \(i\)-th instance is given by a vector \(R_i^{(l)} \in \mathbb{R}^{1 \times D}\). For convenience, the information representing an instance is always represented as a vector of length \(D\). However, if you have tensors for \(R_i^{(l)}\), it is recommended to use a projection or a flattened version of the representation.
+
 
 ## How to install
 
