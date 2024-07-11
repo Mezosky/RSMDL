@@ -16,7 +16,7 @@ pip install -U deep-reps
 
 ## How to Use
 
-The library is user-friendly, allowing you to directly import the desired metric and generate a set of vectors for evaluation. It is important to note that the matrices to be evaluated should have the dimensionality \( R^{N \times D} \), where \( N \) represents the number of instances and \( D \) is the dimension of each tensor representation. When comparing two matrices \( R \) and \( R' \), ensure that \( D = D' \); otherwise, errors will occur.
+The library is user-friendly, allowing you to directly import the desired metric and generate a set of vectors for evaluation. It is important to note that the matrices to be evaluated should have the dimensionality $R^{N \times D}$, where $N$ represents the number of instances and $D$ is the dimension of each tensor representation. When comparing two matrices $R$ and $R'$, ensure that $D=D'$; otherwise, errors will occur.
 
 As an example, a set of outputs from two Clip models is compared using the `rsm_norm_difference` metric.
 
