@@ -50,6 +50,7 @@ images_features_1 = torch.cat(images_features_1)
 images_features_2 = torch.cat(images_features_2)
 
 print(f"RSM Norm Difference: {rsm_norm_difference(images_features_1, images_features_2)}")
+>>RSM Norm Difference: 0.8515523672103882
 ```
 
 
