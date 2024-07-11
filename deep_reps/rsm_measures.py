@@ -12,7 +12,7 @@ def rsm_norm_difference(R, R_prime, similarity_function=linear_kernel):
     S = compute_rsm(R, similarity_function)
     S_prime = compute_rsm(R_prime, similarity_function)
 
-    return float(euclidean_distance(S, S_prime))
+    return euclidean_distance(S, S_prime).item()
 
 
 def representation_similarity_analysis(R, R_prime, similarity_function=linear_kernel):
@@ -28,7 +28,7 @@ def representation_similarity_analysis(R, R_prime, similarity_function=linear_ke
     v = S[torch.tril_indices(n, n, offset=-1)].flatten()
     v_prime = S_prime[torch.tril_indices(n, n, offset=-1)].flatten()
 
-    return float(torch.corrcoef(v, v_prime)[0, 1])
+    return torch.corrcoef(v, v_prime)[0, 1].item()
 
 
 def centered_kernel_alignment(R, R_prime, similarity_function=linear_kernel):
