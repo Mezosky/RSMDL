@@ -1,4 +1,5 @@
 import torch
+import torch.nn.functional as F
 
 from deep_reps import get_knn_indices_and_ranks
 
