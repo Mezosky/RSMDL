@@ -1,6 +1,7 @@
 import torch
 import torch.nn.functional as F
 import torch.optim as optim
+from utils import mean_center_columns
 
 from deep_reps.utils import (
     epsilon_approximate_match,

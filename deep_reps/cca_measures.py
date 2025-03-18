@@ -1,91 +1,91 @@
-# implementation in torch
 import torch
-
 from deep_reps.utils import pca
 
+class BaseCCA:
+    def __init__(self, X: torch.Tensor, Y: torch.Tensor):
+        self.X_raw = X
+        self.Y_raw = Y
+        self.X = self._mean_center(X)
+        self.Y = self._mean_center(Y)
+        self.sigma_X, self.sigma_Y, self.sigma_XY = self._compute_covariances()
 
-def mean_center(X):
-    """Mean center the data, due to this method Assume mean-centered representations"""
-    return X - X.mean(dim=0)
+    def _mean_center(self, X):
+        return X - X.mean(dim=0)
 
+    def _compute_covariances(self):
+        n_samples = self.X.size(0)
+        sigma_X = self.X.T @ self.X / (n_samples - 1)
+        sigma_Y = self.Y.T @ self.Y / (n_samples - 1)
+        sigma_XY = self.X.T @ self.Y / (n_samples - 1)
+        return sigma_X, sigma_Y, sigma_XY
 
-def compute_covariance_matrices(X, Y):
-    n_samples = X.size(0)
-    sigma_X = X.T @ X / (n_samples - 1)
-    sigma_Y = Y.T @ Y / (n_samples - 1)
-    sigma_XY = X.T @ Y / (n_samples - 1)
-    return sigma_X, sigma_Y, sigma_XY
+    def _compute_inv_sqrt(self, matrix):
+        eigvals, eigvecs = torch.linalg.eigh(matrix)
+        eigvals = torch.clamp(eigvals, min=1e-10)
+        return eigvecs @ torch.diag(1.0 / torch.sqrt(eigvals)) @ eigvecs.T
 
+    def compute_cca(self, output_dim=None):
+        inv_sqrt_X = self._compute_inv_sqrt(self.sigma_X)
+        inv_sqrt_Y = self._compute_inv_sqrt(self.sigma_Y)
+        T = inv_sqrt_X @ self.sigma_XY @ inv_sqrt_Y
+        U, S, Vh = torch.linalg.svd(T)
+        V = Vh.T
 
-def compute_inverse_sqrt_matrix(matrix):
-    eigvals, eigvecs = torch.linalg.eigh(matrix)
-    eigvals = torch.clamp(eigvals, min=1e-10)  # Avoid division by zero
-    inv_sqrt_matrix = eigvecs @ torch.diag(1.0 / torch.sqrt(eigvals)) @ eigvecs.T
-    return inv_sqrt_matrix
+        if output_dim is not None:
+            U = U[:, :output_dim]
+            S = S[:output_dim]
+            V = V[:, :output_dim]
 
-
-def compute_cca(X, Y):
-    # Center the data
-    X_centered = mean_center(X)
-    Y_centered = mean_center(Y)
-
-    # Compute covariance matrices
-    sigma_X, sigma_Y, sigma_XY = compute_covariance_matrices(X_centered, Y_centered)
-
-    # Compute inverse square roots of covariance matrices
-    sqrt_inv_sigma_X = compute_inverse_sqrt_matrix(sigma_X)
-    sqrt_inv_sigma_Y = compute_inverse_sqrt_matrix(sigma_Y)
-
-    # Compute the transformation matrix
-    T = sqrt_inv_sigma_X @ sigma_XY @ sqrt_inv_sigma_Y
-
-    # Perform SVD on the transformation matrix
-    U, S, V = torch.svd(T)
-
-    # Select the top output_dim components
-    X_c = X_centered @ sqrt_inv_sigma_X @ U
-    Y_c = Y_centered @ sqrt_inv_sigma_Y @ V
-
-    return X_c, Y_c, S
+        self.S = S
+        self.X_proj = self.X @ inv_sqrt_X @ U
+        self.Y_proj = self.Y @ inv_sqrt_Y @ V
+        return self.X_proj, self.Y_proj, S
 
 
-def compute_standard_cca(X, Y):
-    _, _, S = compute_cca(X, Y)
-    return float(1 / X.size(1) * torch.sum(S))
+class StandardCCA(BaseCCA):
+    def compute_similarity(self):
+        _, _, S = self.compute_cca()
+        return float(S.mean())
 
 
-def compute_yanai_cca(X, Y):
-    _, _, S = compute_cca(X, Y)
-    return float(1 / X.size(1) * torch.sum(S**2))
+class YanaiCCA(BaseCCA):
+    def compute_similarity(self):
+        _, _, S = self.compute_cca()
+        return float(torch.mean(S ** 2))
 
 
-def compute_standard_svcca(X, Y, variance_retained=0.99):
-    X_pca, _ = pca(X, variance_retained)
-    Y_pca, _ = pca(Y, variance_retained)
+class SVCCA(BaseCCA):
+    def __init__(self, X: torch.Tensor, Y: torch.Tensor, variance_retained=0.99):
+        X_pca, _ = pca(X, variance_retained)
+        Y_pca, _ = pca(Y, variance_retained)
+        super().__init__(X_pca, Y_pca)
 
-    _, _, S = compute_cca(X_pca, Y_pca)
-    return float(1 / X.size(1) * torch.sum(S))
-
-
-def compute_yanai_svcca(X, Y, variance_retained=0.99):
-    X_pca, _ = pca(X, variance_retained)
-    Y_pca, _ = pca(Y, variance_retained)
-
-    _, _, S = compute_cca(X_pca, Y_pca)
-    return float(1 / X.size(1) * torch.sum(S**2))
+    def compute_similarity(self):
+        _, _, S = self.compute_cca()
+        return float(S.mean())
 
 
-def compute_wvcca(X, Y, output_dim=1):
-    X_c, _, S = compute_cca(X, Y, output_dim)
+class YanaiSVCCA(BaseCCA):
+    def __init__(self, X: torch.Tensor, Y: torch.Tensor, variance_retained=0.99):
+        X_pca, _ = pca(X, variance_retained)
+        Y_pca, _ = pca(Y, variance_retained)
+        super().__init__(X_pca, Y_pca)
 
-    output_dim = X_c.size(1)
-    X = mean_center(X)
-    weights = torch.zeros(output_dim)
-    for i in range(output_dim):
-        Xw = X.T @ X_c[:, i]
-        weights[i] = torch.abs(torch.sum(Xw @ X.T))
+    def compute_similarity(self):
+        _, _, S = self.compute_cca()
+        return float(torch.mean(S ** 2))
 
-    # Normalize the weights
-    weights = weights / torch.sum(weights)
-    # Compute the final PWCCA measure
-    return float(torch.sum(weights * S))
+
+class PWCCA(BaseCCA):
+    def compute_similarity(self, output_dim=1):
+        X_proj, _, S = self.compute_cca(output_dim)
+        output_dim = X_proj.size(1)
+
+        X_centered = self._mean_center(self.X_raw)
+        weights = torch.zeros(output_dim)
+        for i in range(output_dim):
+            Xw = X_centered.T @ X_proj[:, i]
+            weights[i] = torch.abs(torch.sum(Xw @ X_centered.T))
+
+        weights /= weights.sum()
+        return float(torch.sum(weights * S))
